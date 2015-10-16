@@ -9,20 +9,41 @@
 
 module Localizable
 
-  def self.localize(type, id, name)
-    value = name
-    unless Setting["plugin_localizable"].nil?
-      unless Setting["plugin_localizable"]["locales"].nil?
-        unless Setting["plugin_localizable"]["locales"][type].nil?
-          unless Setting["plugin_localizable"]["locales"][type][id.to_s].nil?
-            unless Setting["plugin_localizable"]["locales"][type][id.to_s][User.current.language.to_s].blank?
-              value = Setting["plugin_localizable"]["locales"][type][id.to_s][User.current.language.to_s]
+  def self.included(base)
+    base.extend(ClassMethods)
+
+    # Same as typing in the class
+    base.class_eval do
+      unloadable # Send unloadable so it will not be unloaded in developmen
+
+      def name(original = false)
+        return(original ? super() : self.class.localize(id, super()))
+      end
+    end
+  end
+
+  module ClassMethods
+    def localize(id, name)
+      value = name
+
+      if Setting["plugin_localizable"]
+        if Setting["plugin_localizable"]["locales"]
+          if Setting["plugin_localizable"]["locales"][localize_type]
+            if Setting["plugin_localizable"]["locales"][localize_type][id.to_s]
+              unless Setting["plugin_localizable"]["locales"][localize_type][id.to_s][User.current.language.to_s].blank?
+                value = Setting["plugin_localizable"]["locales"][localize_type][id.to_s][User.current.language.to_s]
+              end
             end
           end
         end
       end
+
+      return(value)
     end
-    return(value)
+
+    def localize_type
+      @localize_type ||= (self.superclass == "ActiveRecord::Base" ? self : self.superclass).name.underscore
+    end
   end
 
 end

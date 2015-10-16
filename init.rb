@@ -15,11 +15,11 @@ end
 require "redmine"
 require "rubygems"
 
-Role.send(:include, RolePatch)
-Tracker.send(:include, TrackerPatch)
-IssueStatus.send(:include, IssueStatusPatch)
-CustomField.send(:include, CustomFieldPatch)
-Enumeration.send(:include, EnumerationPatch)
+Role.send(:include, Localizable)
+Tracker.send(:include, Localizable)
+IssueStatus.send(:include, Localizable)
+CustomField.send(:include, Localizable)
+Enumeration.send(:include, Localizable)
 
 Redmine::Plugin.register :localizable do
   name "Localizable plugin"
@@ -29,7 +29,7 @@ Redmine::Plugin.register :localizable do
   description "This is a plugin for Redmine that is used to show strings (issue types, issue statuses, enumerations, ...) in serveral languages"
   version "0.4.0"
   requires_redmine :version_or_higher => "2.1.0"
-  
+
   settings(:default => {"default_language" => "en",
                         "locales_to_translate" => [],
                         "locales" => {"tracker" => {},
