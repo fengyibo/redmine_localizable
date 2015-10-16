@@ -1,6 +1,6 @@
 # Forked from
 
-https://redmine.ociotec.com/projects/localizable/repository
+https://redmine.ociotec.com/projects/localizable/
 
 # Overview
 
