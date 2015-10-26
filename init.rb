@@ -35,4 +35,8 @@ Redmine::Plugin.register :localizable do
                         "locales" => {"tracker" => {},
                                       "issue_status" => {}}},
            :partial => "settings/localizable")
+
+
+  Redmine::FieldFormat::List.send(:include, Localizable::Patches::ListPatch) unless Redmine::FieldFormat::List.included_modules.include?(Localizable::Patches::ListPatch)
+
 end
