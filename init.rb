@@ -27,7 +27,7 @@ Redmine::Plugin.register :localizable do
   author "Emilio González Montaña"
   author_url "http://ociotec.com"
   description "This is a plugin for Redmine that is used to show strings (issue types, issue statuses, enumerations, ...) in serveral languages"
-  version "0.4.0"
+  version "1.1"
   requires_redmine :version_or_higher => "2.1.0"
 
   settings(:default => {"default_language" => "en",
