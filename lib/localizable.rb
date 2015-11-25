@@ -42,7 +42,7 @@ module Localizable
     end
 
     def localize_type
-      @localize_type ||= (self.superclass == "ActiveRecord::Base" ? self : self.superclass).name.underscore
+      @localize_type ||= (self.superclass.to_s == "ActiveRecord::Base" ? self : self.superclass).name.underscore
     end
   end
 
