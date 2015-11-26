@@ -20,6 +20,7 @@ Tracker.send(:include, Localizable)
 IssueStatus.send(:include, Localizable)
 CustomField.send(:include, Localizable)
 Enumeration.send(:include, Localizable)
+Project.send(:include, Localizable)
 
 Redmine::Plugin.register :localizable do
   name "Localizable plugin"

@@ -49,6 +49,7 @@
 
 <%- elements = [{:name => "role", :objects => Role.all, :label => :label_role_plural},
                 {:name => "tracker", :objects => Tracker.all, :label => :label_tracker_plural},
+                {:name => "project", :objects => Project.all, :label => :label_project_plural},
                 {:name => "issue_status", :objects => IssueStatus.all, :label => :label_issue_status_plural},
                 {:name => "custom_field", :objects => CustomField.all, :label => :label_custom_field_plural},
                 {:name => "enumeration", :objects => Enumeration.where("project_id IS NULL").sort{|a, b| a.type.downcase <=> b.type.downcase}, :label => :label_enumerations}] -%>
