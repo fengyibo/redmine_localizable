@@ -68,7 +68,11 @@ module Localizable
       private
 
       def possible_custom_values(custom_value)
-        possible_custom_value_options(custom_value).map {|value| [localizable_value(value), value]  }
+        if custom_value.custom_field.field_format ==  "user"
+          possible_custom_value_options(custom_value)
+        else
+          possible_custom_value_options(custom_value).map {|value| [localizable_value(value), value]  }
+        end
       end
 
       def localizable_value(value)
