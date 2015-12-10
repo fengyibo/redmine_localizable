@@ -15,6 +15,7 @@ end
 require "redmine"
 require "rubygems"
 
+
 Role.send(:include, Localizable)
 Tracker.send(:include, Localizable)
 IssueStatus.send(:include, Localizable)
@@ -37,7 +38,9 @@ Redmine::Plugin.register :localizable do
                                       "issue_status" => {}}},
            :partial => "settings/localizable")
 
-
-  Redmine::FieldFormat::List.send(:include, Localizable::Patches::ListPatch) unless Redmine::FieldFormat::List.included_modules.include?(Localizable::Patches::ListPatch)
+  Rails.configuration.to_prepare do
+       Redmine::FieldFormat::List.send(:include, Localizable::Patches::ListPatch) unless Redmine::FieldFormat::List.included_modules.include?(Localizable::Patches::ListPatch)
+       Issue.send(:include, Localizable::Patches::IssuePatch) unless Issue.included_modules.include?(Localizable::Patches::IssuePatch)
+   end
 
 end

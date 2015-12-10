@@ -131,3 +131,61 @@
     <% end %>
   </table>
 <% end %>
+
+<% descriptions = CustomField.where('description != ?', "").all.map(&:description).flatten.uniq %>
+<% if descriptions.size > 0 %>
+  <br />
+  <h2><%= l(:field_description) %></h2>
+  <table>
+    <thead>
+      <th align="left" width="180px"><%= ll(@settings["default_language"], :general_lang_name) %></th>
+      <% @settings["locales_to_translate"].each do |locale| -%>
+        <th align="left"><%= ll(locale, :general_lang_name) %></th>
+      <%- end -%>
+    </thead>
+    <%- @settings["locales"][:descriptions] = {} if @settings["locales"][:descriptions].nil? -%>
+    <% descriptions.each do |description| %>
+    <%- @settings["locales"][:descriptions][description] = {} if @settings["locales"][:descriptions][description].nil? -%>
+      <tr>
+        <td>
+          <%= description %>
+        </td>
+        <%- @settings["locales_to_translate"].each do |locale| -%>
+        <td align="left">
+          <input name="settings[locales][descriptions][<%= description %>][<%= locale.to_s.force_encoding("UTF-8") %>]"
+                 value="<%= @settings["locales"][:descriptions][description][locale].to_s.force_encoding("UTF-8") %>" />
+        </td>
+        <%- end -%>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<% defaults = CustomField.all.where('default_value != ?', "").map(&:default_value).flatten.uniq %>
+<% if defaults.size > 0 && !defaults.nil? && defaults != ""%>
+  <br />
+  <h2><%= l(:field_default_value) %></h2>
+  <table>
+    <thead>
+      <th align="left" width="180px"><%= ll(@settings["default_language"], :general_lang_name) %></th>
+      <% @settings["locales_to_translate"].each do |locale| -%>
+        <th align="left"><%= ll(locale, :general_lang_name) %></th>
+      <%- end -%>
+    </thead>
+    <%- @settings["locales"][:defaults] = {} if @settings["locales"][:defaults].nil? -%>
+    <% defaults.each do |default| %>
+    <%- @settings["locales"][:defaults][default] = {} if @settings["locales"][:defaults][default].nil? -%>
+      <tr>
+        <td>
+          <%= default %>
+        </td>
+        <%- @settings["locales_to_translate"].each do |locale| -%>
+        <td align="left">
+          <input name="settings[locales][defaults][<%= default %>][<%= locale.to_s.force_encoding("UTF-8") %>]"
+                 value="<%= @settings["locales"][:defaults][default][locale].to_s.force_encoding("UTF-8") %>" />
+        </td>
+        <%- end -%>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
