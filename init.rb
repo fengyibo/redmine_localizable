@@ -41,6 +41,7 @@ Redmine::Plugin.register :localizable do
   Rails.configuration.to_prepare do
        Redmine::FieldFormat::List.send(:include, Localizable::Patches::ListPatch) unless Redmine::FieldFormat::List.included_modules.include?(Localizable::Patches::ListPatch)
        Issue.send(:include, Localizable::Patches::IssuePatch) unless Issue.included_modules.include?(Localizable::Patches::IssuePatch)
+       CustomFieldsHelper.send(:include, Localizable::Patches::CustomFieldsHelperPatch) unless CustomFieldsHelper.included_modules.include?(Localizable::Patches::CustomFieldsHelperPatch)
    end
 
 end
