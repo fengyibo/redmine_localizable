@@ -1,5 +1,3 @@
-require 'issue'
-
 module Localizable
   module Patches
     module IssuePatch

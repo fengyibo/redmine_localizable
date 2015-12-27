@@ -1,5 +1,3 @@
-require 'custom_fields_helper'
-
 module Localizable
   module Patches
     module CustomFieldsHelperPatch
