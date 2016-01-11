@@ -108,4 +108,4 @@
 <%= render partial: 'settings/other/custom_field_possible_values' %>
 <%= render partial: 'settings/other/custom_field_descriptions' %>
 <%= render partial: 'settings/other/custom_field_default_values' %>
-<%= render partial: 'settings/other/tracker_descriptions' %>
+<%= render partial: 'settings/other/tracker_descriptions' if Tracker.column_names.include? "description" %>
