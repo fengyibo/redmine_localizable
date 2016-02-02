@@ -1,4 +1,4 @@
-<% possible_values = CustomField.where(field_format: :list).all.map(&:possible_values).flatten.uniq %>
+<% possible_values = CustomField.where(field_format: :list, is_possible_values_localizable: true).all.map(&:possible_values).flatten.uniq %>
 <% if possible_values.size > 0 %>
   <br />
   <h2 id="possible_values"><%= l(:field_possible_values) %> [+]</h2>
