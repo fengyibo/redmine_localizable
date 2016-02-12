@@ -16,6 +16,8 @@ module Localizable
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in developmen
 
+      include Redmine::I18n
+
       def name(original = false)
         return(original ? super() : self.class.localize(id, super()))
       end
@@ -30,8 +32,8 @@ module Localizable
         if Setting["plugin_localizable"]["locales"]
           if Setting["plugin_localizable"]["locales"][localize_type]
             if Setting["plugin_localizable"]["locales"][localize_type][id.to_s]
-              unless Setting["plugin_localizable"]["locales"][localize_type][id.to_s][User.current.language.to_s].blank?
-                value = Setting["plugin_localizable"]["locales"][localize_type][id.to_s][User.current.language.to_s]
+              unless Setting["plugin_localizable"]["locales"][localize_type][id.to_s][current_language.to_s].blank?
+                value = Setting["plugin_localizable"]["locales"][localize_type][id.to_s][current_language.to_s]
               end
             end
           end
