@@ -8,48 +8,62 @@ module Localizable
         base.class_eval do
           unloadable
 
-          alias_method_chain :mail, :localizable
+          alias_method_chain :issue_add, :localizable
+          alias_method_chain :issue_edit, :localizable
+
+          def self.deliver_issue_add(issue)
+            to = issue.notified_users
+            cc = issue.notified_watchers - to
+
+            previous_language = current_language
+
+            all_notified_users = to + cc
+            all_notified_users.group_by(&:language).each do |language, addressees|
+
+              set_language_if_valid language
+
+              issue.each_notification(addressees) do |users|
+                Mailer.issue_add(issue, to & users, cc & users, language).deliver
+              end
+            end
+          end
+
+          def self.deliver_issue_edit(journal)
+            issue = journal.journalized.reload
+            to = journal.notified_users
+            cc = journal.notified_watchers - to
+
+            previous_language = current_language
+
+            all_notified_users = to + cc
+            all_notified_users.group_by(&:language).each do |language, addressees|
+
+              set_language_if_valid language
+
+              journal.each_notification(addressees) do |users|
+                issue.each_notification(users) do |users2|
+                  Mailer.issue_edit(journal, to & users2, cc & users2, language).deliver
+                end
+              end
+            end
+
+            set_language_if_valid previous_language
+
+          end
 
         end
       end
 
       module InstanceMethods
 
-        def mail_with_localizable(headers={}, &block)
-          previous_language = current_language
+        def issue_add_with_localizable(issue, to_users, cc_users, language = nil)
+          set_language_if_valid language if language
+          issue_add_without_localizable(issue, to_users, cc_users)
+        end
 
-          recipients_by_language = {}
-          [:to, :cc, :bcc].each do |key|
-            Array.wrap(headers[key]).each do |recipient|
-              lang = (recipient.is_a?(Principal) ? recipient.language : previous_language)
-              recipients_by_language[lang] ||= { key => [] }
-              recipients_by_language[lang][key] << recipient
-            end
-          end
-
-          m = nil
-
-          recipients_by_language.each do |language, recipients|
-            set_language_if_valid language
-
-            @_message = Mail::Message.new
-            mail_headers = headers.dup
-
-            mail_headers[:to] = recipients[:to]
-            mail_headers[:cc] = recipients[:cc]
-            mail_headers[:bcc] = recipients[:bcc]
-
-            m = mail_without_localizable(mail_headers, &block)
-            m.deliver
-          end
-
-          m[:to] = nil
-          m[:cc] = nil
-          m[:bcc] = nil
-
-          set_language_if_valid previous_language
-
-          m
+        def issue_edit_with_localizable(journal, to_users, cc_users, language = nil)
+          set_language_if_valid language if language
+          issue_edit_without_localizable(journal, to_users, cc_users)
         end
 
       end
