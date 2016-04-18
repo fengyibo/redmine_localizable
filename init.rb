@@ -37,6 +37,8 @@ Redmine::Plugin.register :localizable do
                                       "issue_status" => {}}},
            :partial => "settings/localizable")
 
+  require_dependency 'localizable/patches/mailer_patch'
+
   Rails.configuration.to_prepare do
     Redmine::FieldFormat::List.send(:include, Localizable::Patches::ListPatch) unless Redmine::FieldFormat::List.included_modules.include?(Localizable::Patches::ListPatch)
     Issue.send(:include, Localizable::Patches::IssuePatch) unless Issue.included_modules.include?(Localizable::Patches::IssuePatch)
