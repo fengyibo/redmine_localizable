@@ -45,7 +45,9 @@ module Localizable
         # Renders the edit tag as check box or radio tags
         def check_box_edit_tag_with_localizable(view, tag_id, tag_name, custom_value, options={})
           opts = []
-
+          unless custom_value.custom_field.multiple? || custom_value.custom_field.is_required?
+            opts << ["(#{l(:label_none)})", '']
+          end
           opts += possible_custom_value_options(custom_value)
           s = ''.html_safe
           tag_method = custom_value.custom_field.multiple? ? :check_box_tag : :radio_button_tag
@@ -68,7 +70,7 @@ module Localizable
       private
 
       def possible_custom_values(custom_value)
-        if ['user', 'group', 'bool'].include? custom_value.custom_field.field_format || (! custom_value.custom_field.is_possible_values_localizable?)
+        if ['user', 'group', 'bool', 'enumeration'].include? custom_value.custom_field.field_format || (! custom_value.custom_field.is_possible_values_localizable?)
           possible_custom_value_options(custom_value)
         else
           possible_custom_value_options(custom_value).map {|value| [localizable_value(value), value]  }
