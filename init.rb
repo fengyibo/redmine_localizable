@@ -43,6 +43,7 @@ Redmine::Plugin.register :localizable do
     Redmine::FieldFormat::List.send(:include, Localizable::Patches::ListPatch) unless Redmine::FieldFormat::List.included_modules.include?(Localizable::Patches::ListPatch)
     Issue.send(:include, Localizable::Patches::IssuePatch) unless Issue.included_modules.include?(Localizable::Patches::IssuePatch)
     CustomFieldsHelper.send(:include, Localizable::Patches::CustomFieldsHelperPatch) unless CustomFieldsHelper.included_modules.include?(Localizable::Patches::CustomFieldsHelperPatch)
+    IssueStatus.send(:include, Localizable::Patches::IssueStatusPatch) unless IssueStatus.included_modules.include?(Localizable::Patches::IssueStatusPatch)
     ApplicationHelper.send(:include, Localizable::Patches::ApplicationHelperPatch) unless ApplicationHelper.included_modules.include?(Localizable::Patches::ApplicationHelperPatch)
   end
 end
